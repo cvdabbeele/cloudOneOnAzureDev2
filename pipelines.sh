@@ -4,6 +4,8 @@ printf '%s\n' "Creating Azure pipelines "
 printf '%s\n' "-------------------------------"
 
 
+
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # TO DO 
 # Make this pipeline work for ${APP1} ${APP2} and ${APP3}
@@ -151,7 +153,7 @@ az pipelines create \
 printf '%s\n' "Exporting variables for Azure pipelines (if not already existing)"
 export TAG="dummyTag"
 export myvar="dummyMyVarFromScript"
-export PIPELINE_VARS=(DSSC_HOST DSSC_USERNAME DSSC_TEMPPW DSSC_PASSWORD DSSC_REGUSER DSSC_REGPASSWORD TREND_AP_KEY TREND_AP_SECRET APP1 SP_APP_ID SP_PASSWD AZURE_ACR_LOGINSERVER  AZURE_PROJECT TAG myvar)
+export PIPELINE_VARS=(SP_APP_ID SP_PASSWD DSSC_HOST DSSC_USERNAME DSSC_TEMPPW DSSC_PASSWORD DSSC_REGUSER DSSC_REGPASSWORD TREND_AP_KEY TREND_AP_SECRET APP1 SP_APP_ID SP_PASSWD AZURE_ACR_LOGINSERVER  AZURE_PROJECT TAG myvar)
 for pipelineVar in ${PIPELINE_VARS[@]}; do
   echo Checking pipelineVar=${pipelineVar}
   if  [ "` grep \"${pipelineVar}\" AZ_PIPELINE_VARS.tmp `" = "" ]
@@ -187,7 +189,7 @@ echo 'removing "    - upload: manifests" from work/pipeline.part1; it is in part
 sed -i 's/    - upload: manifests//g' work/azure-pipelines.part1.yml
 echo 'changing the buildAndPush command to build; the push part will be imported with the azure-pipelines-smartcheck-insert'
 sed -i 's/command: buildAndPush/command: build/g' work/azure-pipelines.part1.yml
-sed -i 's/Build and push an image to container registry/Build an image/g' work/azure-pipelines.part1.yml
+sed -i 's/Build and push an image to container registry/Build/g' work/azure-pipelines.part1.yml
 #cat work/azure-pipelines.part1.yml
 grep "    - upload: manifests"  azure-pipelines.yml -A999 >work/azure-pipelines.part2.yml 
 #cat work/azure-pipelines.part2.yml 

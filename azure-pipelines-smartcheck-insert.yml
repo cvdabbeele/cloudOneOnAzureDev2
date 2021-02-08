@@ -22,7 +22,7 @@
         --insecure-skip-tls-verify \
         --insecure-skip-registry-tls-verify \
         --findings-threshold='{"malware": 0, "vulnerabilities": { "defcon1": 0, "critical": 0, "high": 0 }, "contents": { "defcon1": 0, "critical": 0, "high": 0 }, "checklists": { "defcon1": 0, "critical": 0, "high": 0 }}'
-      displayName: "Scan an image"
+      displayName: "Scan pre-registry"
 
     - task: Docker@2
       displayName: Push an image
@@ -33,6 +33,23 @@
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+    - name: Deep Security Smart Check Scan ACR
+          # Be sure to specify the latest version of smartcheck-scan-action
+          uses: deep-security/smartcheck-scan-action@latest
+          with:
+            DSSC_IMAGE_NAME: $(containerRegistry)/$(imageRepository):$(tag)
+            DSSC_SMARTCHECK_HOST: $(DSSC_HOST)
+            DSSC_SMARTCHECK_USER: $(DSSC_USERNAME)
+            DSSC_SMARTCHECK_PASSWORD: $(DSSC_PASSWORD)
+            DSSC_IMAGE_PULL_AUTH: '{"username": "$(SP_APP_ID)","password": "$(SP_PASSWD)"}'
+            DSSC_FINDINGS_THRESHOLD: '{"malware": 0, "vulnerabilities": { "defcon1": 0, "critical": 0, "high": 0 }, "contents": { "defcon1": 0, "critical": 0, "high": 0 }, "checklists": { "defcon1": 0, "critical": 0, "high": 0 }}'            
+            DSSC_INSECURE_SKIP_TLS_VERIFY: true
+            DSSC_INSECURE_SKIP_REGISTRY_TLS_VERIFY: true
+
+    #Infor: login to ACR
+    #docker login c1appsecmoneyx.azurecr.io  -u $SP_APP_ID -p $SP_PASSWD
+
     # To Do: use "exit 1"  to stop the pipeline
     # end of Scan the Container Image with Deep Security Smart Check
 
