@@ -101,9 +101,12 @@ export AZURE_GROUP=( `az group list -o json| jq -r  ".[]|select(.name|test(\"${A
 # deploy SmartCheck
 . ./smartcheck.sh
 
-#adding registries
+# add registries
 . ./SmartcheckInternalRepo.sh
 . ./smartcheckDemoRepo.sh
+. ./smartcheckAddACR.sh
+
+# add C1CS
 . ./add_C1CS.sh
 
 # add the demo apps
@@ -112,7 +115,7 @@ export AZURE_GROUP=( `az group list -o json| jq -r  ".[]|select(.name|test(\"${A
 # setup azure CodePipeline
 . ./pipelines.sh
 
-. ./smartcheckAddACR.sh
+
 
 ###OLD####delete the cluster
 ###OLD###az group delete --name AZURE_PROJECT --yes --no-wait###OLD###
