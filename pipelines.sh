@@ -47,7 +47,7 @@ done
 #  az pipelines delete --id ${AZURE_PIPELINE_ID} --project $APP1 -y
 #fi
 if [[ -f "azure-pipelines.yml" ]]; then
-   printf '%s\n' "Deleting old azure-pipelines.yml for $APP1"
+   printf '%s\n' "Deleting old local file azure-pipelines.yml for $APP1"
    #mv azure-pipelines.yml azure-pipelines.`date +%s`
    rm -rf azure-pipelines.yml
    printf '%s\n' "Pushing changes to ${APP1} registry"
@@ -57,7 +57,7 @@ if [[ -f "azure-pipelines.yml" ]]; then
    git push ${AZURE_GIT_REPO_URL1_AUTH}
 fi
 if [ -d "manifests" ]; then
-   printf '%s\n' "Deleting old manifests for $APP1"
+   printf '%s\n' "Deleting old local directory manifests for $APP1"
    #mv manifests manifests.`date +%s`
    rm -r manifests
    printf '%s\n' "Pushing changes to ${APP1} registry"
@@ -183,18 +183,28 @@ cat ${RETURN_DIR}/azure-pipelines-smartcheck-insert.yml >> work/azure-pipelines.
 cat work/azure-pipelines.part2.yml >> work/azure-pipelines.yml  
 
 echo "take section up to        - task: KubernetesManifest@0"
-grep 'task: KubernetesManifest@0'  work/azure-pipelines.yml -B999 >work/azure-pipelines2.yml 
+grep -m 1 'task: KubernetesManifest@0'  work/azure-pipelines.yml -B999 >work/azure-pipelines2.yml 
 echo "removing        - task: KubernetesManifest@0"
 sed -i 's/        - task: KubernetesManifest@0//g' work/azure-pipelines2.yml
+
 echo "adding Set Environment Variables for Cloud One Application Security"
-printf '%s\n' "" >>  work/azure-pipelines2.yml
+printf '%s\n' " " >>  work/azure-pipelines2.yml
 echo "          # Set Environment Variables for Cloud One Application Security" >>  work/azure-pipelines2.yml
 echo "          - script: | " >>  work/azure-pipelines2.yml
 echo "              sed -i 's|_TREND_AP_KEY|$(applicationSecurityKey)|' $(Pipeline.Workspace)/manifests/deployment.yml " >>  work/azure-pipelines2.yml
 echo "              sed -i 's|_TREND_AP_SECRET|$(applicationSecuritySecret)|' $(Pipeline.Workspace)/manifests/deployment.yml " >>  work/azure-pipelines2.yml
 echo "            displayName: \"Configure Cloud One Application Security\" " >>  work/azure-pipelines2.yml
 echo "re-add the part from \"task: KubernetesManifest@0\" and onwards"
-grep 'task: KubernetesManifest@0'  work/azure-pipelines.yml -A999 >>work/azure-pipelines2.yml
+grep 'displayName: Deploy to Kubernetes cluster'  work/azure-pipelines.yml -A999 >>work/azure-pipelineslastparttemp.yml
+
+echo "          - task: KubernetesManifest@0" >> work/azure-pipelineslastpart.yml
+cat work/azure-pipelineslastparttemp.yml >> work/azure-pipelineslastpart.yml
+
+cat  work/azure-pipelineslastpart.yml >> work/azure-pipelines2.yml 
+
+cp work/azure-pipelines2.yml azure-pipelines.yml
+
+
 
 
 printf '%s\n' "" >> manifests/deployment.yml
