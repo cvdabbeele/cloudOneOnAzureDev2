@@ -2,11 +2,6 @@
 
     # Scan the Container Image with Deep Security Smart Check
     - script: |
-        echo '----------------------------------------'
-        echo '----------------------------------------'
-        echo '----------------------------------------'
-        echo '----------------------------------------'
-        echo '----------------------------------------'
         echo 'preparing things'
         openssl s_client -showcerts -connect $(DSSC_HOST):443 < /dev/null | \
           sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $(DSSC_HOST).crt
@@ -41,3 +36,6 @@
     # To Do: use "exit 1"  to stop the pipeline
     # end of Scan the Container Image with Deep Security Smart Check
 
+
+
+    

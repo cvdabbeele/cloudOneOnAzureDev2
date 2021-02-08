@@ -196,7 +196,7 @@ cat work/azure-pipelines2.yml
 
 echo "adding Set Environment Variables for Cloud One Application Security"
 printf '%s\n' " " >>  work/azure-pipelines2.yml
-cat ${RETURN_DIR}/insertForC1AS.yml >>  work/azure-pipelines2.yml
+cat ${RETURN_DIR}/azure-pipelines-C1AS.yml >>  work/azure-pipelines2.yml
 echo step 11
 cat work/azure-pipelines2.yml
 
@@ -214,7 +214,8 @@ cat work/azure-pipelines2.yml
 
 cp work/azure-pipelines2.yml azure-pipelines.yml
 
-
+echo Make the pipeline trigger in "master" iso on "main"
+sed -i 's/main/master/g' work/azure-pipelines.part1.yml
 
 printf '%s\n' "" >> manifests/deployment.yml
 echo "          env: "                     >> manifests/deployment.yml

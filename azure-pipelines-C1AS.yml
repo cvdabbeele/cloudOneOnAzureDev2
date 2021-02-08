@@ -4,3 +4,5 @@
               sed -i 's|_TREND_AP_KEY|$(applicationSecurityKey)|' $(Pipeline.Workspace)/manifests/deployment.yml
               sed -i 's|_TREND_AP_SECRET|$(applicationSecuritySecret)|' $(Pipeline.Workspace)/manifests/deployment.yml
             displayName: "Configure Cloud One Application Security"
+
+

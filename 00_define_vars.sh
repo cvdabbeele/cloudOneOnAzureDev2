@@ -29,6 +29,8 @@ export DSSC_REGPASSWORD='Tr3ndm1cr0!'
 ###OLD#### Cloud One Application Security settings (for runtime protection)
 export TREND_AP_KEY='c630c28f-854e-415d-918e-a2f21aa25c0b'
 export TREND_AP_SECRET='af0995db-19c8-4f12-85ed-a7255f9baffc'
+#Full Access Key 2021020
+export C1APIKEY='9E5512E9-1BA1-15A3-0A53-C731ECF62898:FDF46836-41D3-9624-CAFE-80AD5FA32021:mDEXwXckJGKellCzcAlr+vQ++hFcVtvBgfvwc55zCOI='
 
 ###OLD#### APPS
 ###OLD#### using distinct variables as exporting arrays in bash is still troublesome
