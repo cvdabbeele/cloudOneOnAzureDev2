@@ -83,7 +83,11 @@ printf '%s\n' "Creating pipeline $APP1"
 #`
 
 printf '%s\n' "You will be asked 9 questions to configure the Pipeline"
-read  -n 1 -p "Press ENTER to continue" dummyinput
+read  -n 1 -p "Press ENTER to start creating the pipeline -1" dummyinput
+read  -n 1 -p "Press ENTER to start creating the pipeline -2" dummyinput
+read  -n 1 -p "Press ENTER to start creating the pipeline -3" dummyinput
+read  -n 1 -p "Press ENTER to start creating the pipeline -4" dummyinput
+read  -n 1 -p "Press ENTER to start creating the pipeline -5" dummyinput
 
 #the following command will invoke 9 questions 
 printf '%s\n' "      Which template do you want to use for this pipeline?  "
@@ -182,10 +186,9 @@ cat work/azure-pipelines.part1.yml  > work/azure-pipelines.yml
 cat ${RETURN_DIR}/azure-pipelines-smartcheck-insert.yml >> work/azure-pipelines.yml
 cat work/azure-pipelines.part2.yml >> work/azure-pipelines.yml  
 
-echo "take section up to        - task: KubernetesManifest@0"
-grep -m 1 'task: KubernetesManifest@0'  work/azure-pipelines.yml -B999 >work/azure-pipelines2.yml 
-echo "removing        - task: KubernetesManifest@0"
-sed -i 's/        - task: KubernetesManifest@0//g' work/azure-pipelines2.yml
+echo "take section up to               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)"
+grep '              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)'  work/azure-pipelines.yml -B999 >work/azure-pipelines2.yml 
+
 
 echo "adding Set Environment Variables for Cloud One Application Security"
 printf '%s\n' " " >>  work/azure-pipelines2.yml
@@ -203,7 +206,6 @@ cat work/azure-pipelineslastparttemp.yml >> work/azure-pipelineslastpart.yml
 cat  work/azure-pipelineslastpart.yml >> work/azure-pipelines2.yml 
 
 cp work/azure-pipelines2.yml azure-pipelines.yml
-
 
 
 
