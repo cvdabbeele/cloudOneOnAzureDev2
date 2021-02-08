@@ -157,8 +157,8 @@ for pipelineVar in ${PIPELINE_VARS[@]}; do
   if  [ "` grep \"${pipelineVar}\" AZ_PIPELINE_VARS.tmp `" = "" ]
   then
     echo Exporting ${pipelineVar} to pipeline
-    echo '${pipelineVar} ='  ${pipelineVar}
-    echo '${!pipelineVar} =' ${!pipelineVar}
+    #echo '${pipelineVar} ='  ${pipelineVar}
+    #echo '${!pipelineVar} =' ${!pipelineVar}
     dummy=`az pipelines variable create --pipeline-name $APP1 --project $APP1 --name ${pipelineVar} --value ${!pipelineVar}`
   fi
 done
@@ -168,6 +168,16 @@ done
 AZURE_GIT_REPO_URL1_AUTH="https://${AZURE_ORGANIZATION}:${AZURE_DEVOPS_EXT_PAT}@dev.azure.com/${AZURE_ORGANIZATION}/${APP1}/_git/${APP1}"
 git pull ${AZURE_GIT_REPO_URL1_AUTH}
 ls -latr
+
+
+printf '%s\n' "" >> manifests/deployment.yml
+echo "          env: "                     >> manifests/deployment.yml
+echo "          - name: TREND_AP_KEY"      >> manifests/deployment.yml
+echo "            value: _TREND_AP_KEY"    >> manifests/deployment.yml
+echo "          - name: TREND_AP_SECRET"   >> manifests/deployment.yml
+echo "            value: _TREND_AP_SECRET" >> manifests/deployment.yml
+
+
 cat azure-pipelines.yml 
 #cp azure-pipelines.yml azure-pipelines.orig.yml 
 echo Inserting the SmartCheck scan part in the pipeline
@@ -215,15 +225,7 @@ cat work/azure-pipelines2.yml
 cp work/azure-pipelines2.yml azure-pipelines.yml
 
 echo Make the pipeline trigger in "master" iso on "main"
-sed -i 's/main/master/g' work/azure-pipelines.part1.yml
-
-printf '%s\n' "" >> manifests/deployment.yml
-echo "          env: "                     >> manifests/deployment.yml
-echo "          - name: TREND_AP_KEY"      >> manifests/deployment.yml
-echo "            value: _TREND_AP_KEY"    >> manifests/deployment.yml
-echo "          - name: TREND_AP_SECRET"   >> manifests/deployment.yml
-echo "            value: _TREND_AP_SECRET" >> manifests/deployment.yml
-
+sed -i 's/main/master/g' azure-pipelines.yml
 
 ls -latr
 cat azure-pipelines.yml 
