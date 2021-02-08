@@ -29,13 +29,13 @@ if  [ "$varsok" = false ]; then exitdebug 1 ; fi
 
 RETURN_DIR=`pwd`
 dirname=`echo $APP_GIT_URL1 | awk -F"/" '{print $NF}' | awk -F"." '{ print $1 }' `
-echo dirname= $dirname
+#echo dirname= $dirname
 cd ../apps/${dirname}
 mkdir -p work 
 
 #see also: https://mohitgoyal.co/2019/07/16/working-with-azure-devops-pipelines-using-command-line/
 AZURE_PIPELINE_IDS=(`az pipelines list  --project $APP1 | jq -r ".[]|select(.name|test(\"${APP1}\"))|.id"`)
-echo AZURE_PIPELINE_IDS=${AZURE_PIPELINE_IDS}
+#echo AZURE_PIPELINE_IDS=${AZURE_PIPELINE_IDS}
 
 for i in "${!AZURE_PIPELINE_IDS[@]}"; do
    echo "Delting pipeline with ID: ${AZURE_PIPELINE_IDS[$i]}"
@@ -156,13 +156,13 @@ export myvar="dummyMyVarFromScript"
 export PIPELINE_VARS=(SP_APP_ID SP_PASSWD DSSC_HOST DSSC_USERNAME DSSC_TEMPPW DSSC_PASSWORD DSSC_REGUSER DSSC_REGPASSWORD TREND_AP_KEY TREND_AP_SECRET APP1 SP_APP_ID SP_PASSWD AZURE_ACR_LOGINSERVER  AZURE_PROJECT TAG myvar)
 for pipelineVar in ${PIPELINE_VARS[@]}; do
   echo Checking pipelineVar=${pipelineVar}
-  if  [ "` grep \"${pipelineVar}\" AZ_PIPELINE_VARS.tmp `" = "" ]
-  then
+  #if  [ "` grep \"${pipelineVar}\" AZ_PIPELINE_VARS.tmp `" = "" ]
+  #then
     echo Exporting ${pipelineVar} to pipeline
     #echo '${pipelineVar} ='  ${pipelineVar}
     #echo '${!pipelineVar} =' ${!pipelineVar}
     dummy=`az pipelines variable create --pipeline-name $APP1 --project $APP1 --name ${pipelineVar} --value ${!pipelineVar}`
-  fi
+  #fi
 done
 
 
@@ -198,46 +198,29 @@ grep "    - upload: manifests"  azure-pipelines.yml -A999 >work/azure-pipelines.
 cat ${RETURN_DIR}/azure-pipelines-smartcheck-insert.yml >> work/azure-pipelines.part1.yml
 
 cat work/azure-pipelines.part2.yml >> work/azure-pipelines.part1.yml  
-echo step10
+
 echo "take section up to               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)"
 grep '              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)'  work/azure-pipelines.part1.yml -B999 >work/azure-pipelines2.yml 
-
-cat work/azure-pipelines2.yml
-
-
 
 echo "adding Set Environment Variables for Cloud One Application Security"
 printf '%s\n' " " >>  work/azure-pipelines2.yml
 cat ${RETURN_DIR}/azure-pipelines-C1AS.yml >>  work/azure-pipelines2.yml
-echo step 11
-cat work/azure-pipelines2.yml
 
 echo "re-add the part from \"task: KubernetesManifest@0\" and onwards"
 echo '          - task: KubernetesManifest@0' >> work/azure-pipelines2.yml
 grep 'displayName: Deploy to Kubernetes cluster'  work/azure-pipelines.yml -A999 >>work/azure-pipelines2.yml
-echo step 12
-cat work/azure-pipelines2.yml
-
-###echo step13 
-###echo "          - task: KubernetesManifest@0" >> work/azure-pipelineslastpart.yml
-###cat work/azure-pipelineslastparttemp.yml >> work/azure-pipelineslastpart.yml
-###cat work/azure-pipelineslastpart.yml
-##cat  work/azure-pipelineslastpart.yml >> work/azure-pipelines2.yml 
 
 cp work/azure-pipelines2.yml azure-pipelines.yml
 
 echo Make the pipeline trigger in "master" iso on "main"
 sed -i 's/main/master/g' azure-pipelines.yml
 
-ls -latr
-cat azure-pipelines.yml 
 printf '%s\n' "Pushing changes to ${APP1} registry"
 git add .
 git commit -m "commit by \"add_demoApps\""
 AZURE_GIT_REPO_URL1_AUTH="https://${AZURE_ORGANIZATION}:${AZURE_DEVOPS_EXT_PAT}@dev.azure.com/${AZURE_ORGANIZATION}/${APP1}/_git/${APP1}"
 git push ${AZURE_GIT_REPO_URL1_AUTH}
 read  -n 1 -p "Press ENTER to continue" dummyinput
-
 
 #echo AZURE_PIPELINE1_ID = $AZURE_PIPELINE1_ID
 #az pipelines create --name $APP1.test`date +%s` \
