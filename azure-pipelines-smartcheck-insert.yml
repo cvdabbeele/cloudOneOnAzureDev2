@@ -21,7 +21,7 @@
         --smartcheck-password=$(DSSC_PASSWORD) \
         --insecure-skip-tls-verify \
         --insecure-skip-registry-tls-verify \
-        --findings-threshold='{"malware": 200, "vulnerabilities": { "defcon1": 0, "critical": 30, "high": 100 }, "contents": { "defcon1": 0, "critical": 0, "high": 0 }, "checklists": { "defcon1": 0, "critical": 0, "high": 0 }}'
+        --findings-threshold='{"malware": 0, "vulnerabilities": { "defcon1": 0, "critical": 0, "high": 0 }, "contents": { "defcon1": 0, "critical": 0, "high": 0 }, "checklists": { "defcon1": 0, "critical": 0, "high": 0 }}'
       displayName: "Scan an image"
 
     - task: Docker@2
