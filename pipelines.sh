@@ -196,7 +196,7 @@ cat work/azure-pipelines2.yml
 
 echo "adding Set Environment Variables for Cloud One Application Security"
 printf '%s\n' " " >>  work/azure-pipelines2.yml
-cat insertForC1AS.yml >>  work/azure-pipelines2.yml
+cat ${RETURN_DIR}/insertForC1AS.yml >>  work/azure-pipelines2.yml
 echo step 11
 cat work/azure-pipelines2.yml
 
