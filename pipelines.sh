@@ -196,15 +196,12 @@ cat work/azure-pipelines2.yml
 
 echo "adding Set Environment Variables for Cloud One Application Security"
 printf '%s\n' " " >>  work/azure-pipelines2.yml
-echo "          # Set Environment Variables for Cloud One Application Security" >>  work/azure-pipelines2.yml
-echo "          - script: | " >>  work/azure-pipelines2.yml
-echo '              sed -i 's|_TREND_AP_KEY|$(applicationSecurityKey)|' $(Pipeline.Workspace)/manifests/deployment.yml ' >>  work/azure-pipelines2.yml
-echo "              sed -i 's|_TREND_AP_SECRET|$(applicationSecuritySecret)|' $(Pipeline.Workspace)/manifests/deployment.yml " >>  work/azure-pipelines2.yml
-echo "            displayName: \"Configure Cloud One Application Security\" " >>  work/azure-pipelines2.yml
+cat insertForC1AS.yml >>  work/azure-pipelines2.yml
 echo step 11
 cat work/azure-pipelines2.yml
 
 echo "re-add the part from \"task: KubernetesManifest@0\" and onwards"
+echo '          - task: KubernetesManifest@0' >> work/azure-pipelines2.yml
 grep 'displayName: Deploy to Kubernetes cluster'  work/azure-pipelines.yml -A999 >>work/azure-pipelines2.yml
 echo step 12
 cat work/azure-pipelines2.yml
