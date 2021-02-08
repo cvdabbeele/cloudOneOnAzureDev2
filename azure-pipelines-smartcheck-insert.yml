@@ -1,0 +1,43 @@
+
+
+    # Scan the Container Image with Deep Security Smart Check
+    - script: |
+        echo '----------------------------------------'
+        echo '----------------------------------------'
+        echo '----------------------------------------'
+        echo '----------------------------------------'
+        echo '----------------------------------------'
+        echo 'preparing things'
+        openssl s_client -showcerts -connect $(DSSC_HOST):443 < /dev/null | \
+          sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $(DSSC_HOST).crt
+        sudo cp $(DSSC_HOST).crt /usr/local/share/ca-certificates/$(DSSC_HOST).crt
+        sudo mkdir -p /etc/docker/certs.d/$(DSSC_HOST):5000
+        sudo cp $(DSSC_HOST).crt /etc/docker/certs.d/$(DSSC_HOST):5000/ca.crt
+
+        sudo update-ca-certificates
+        echo 'Sending Image to scanner'
+        docker run  -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.cache/:/root/.cache/ deepsecurity/smartcheck-scan-action \
+        --preregistry-scan \
+        --preregistry-password=$(DSSC_REGPASSWORD) \
+        --preregistry-user=$(DSSC_REGUSER) \
+        --image-name=$(containerRegistry)/$(imageRepository):$(tag) \
+        --smartcheck-host=$(DSSC_HOST) \
+        --smartcheck-user=$(DSSC_USERNAME) \
+        --smartcheck-password=$(DSSC_PASSWORD) \
+        --insecure-skip-tls-verify \
+        --insecure-skip-registry-tls-verify \
+        --findings-threshold='{"malware": 200, "vulnerabilities": { "defcon1": 0, "critical": 30, "high": 100 }, "contents": { "defcon1": 0, "critical": 0, "high": 0 }, "checklists": { "defcon1": 0, "critical": 0, "high": 0 }}'
+      displayName: "Scan an image"
+
+    - task: Docker@2
+      displayName: Push an image
+      inputs:
+        command: push
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    # To Do: use "exit 1"  to stop the pipeline
+    # end of Scan the Container Image with Deep Security Smart Check
+
