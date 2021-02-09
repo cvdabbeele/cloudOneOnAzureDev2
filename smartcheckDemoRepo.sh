@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 #printf "Checking required variables..."
 printf '%s\n' "--------------------------------------------------------"
 printf '%s\n' " Adding Demo repository to Smart Check "

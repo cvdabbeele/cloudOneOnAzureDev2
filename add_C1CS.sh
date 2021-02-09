@@ -36,11 +36,11 @@ export TEMPJSON=`\
 curl --silent --location --request POST 'https://cloudone.trendmicro.com/api/container/clusters' --header 'Content-Type: application/json' --header "api-secret-key: ${C1APIKEY}"  --header 'api-version: v1' --data-raw "{    \"name\": \"${AZURE_PROJECT}\",
   \"description\": \"EKS cluster added by the CloudOneOnAWS project ${AZURE_PROJECT}\",
   \"runtimeEnabled\": true }" `
-#echo $TEMPJSON | jq
+echo $TEMPJSON | jq
 export C1APIKEYforCLUSTERS=`echo ${TEMPJSON}| jq -r ".apiKey"`
-#echo  $C1APIKEYforCLUSTERS
+echo  $C1APIKEYforCLUSTERS
 export C1CSCLUSTERID=`echo ${TEMPJSON}| jq -r ".id"`
-#echo $C1CSCLUSTERID
+echo $C1CSCLUSTERID
 
 
 ## deploy C1CS to the K8S cluster of the CloudOneOnAWS project

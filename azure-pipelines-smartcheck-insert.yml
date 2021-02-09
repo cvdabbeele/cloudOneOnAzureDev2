@@ -41,7 +41,7 @@
         --smartcheck-host=$(DSSC_HOST) \
         --smartcheck-user=$(DSSC_USERNAME) \
         --smartcheck-password=$(DSSC_PASSWORD) \
-        --dssc_image_pull_auth="{\"username\": \"$(SP_APP_ID)\",\"password\": \"$(SP_PASSWD)\"}"
+        --image-pull-auth="{\"username\": \"$(SP_APP_ID)\",\"password\": \"$(SP_PASSWD)\"}" \
         --insecure-skip-tls-verify \
         --insecure-skip-registry-tls-verify \
         --findings-threshold='{"malware": 0, "vulnerabilities": { "defcon1": 0, "critical": 0, "high": 0 }, "contents": { "defcon1": 0, "critical": 0, "high": 0 }, "checklists": { "defcon1": 0, "critical": 0, "high": 0 }}'

@@ -85,11 +85,9 @@ printf '%s\n' "Creating pipeline $APP1"
 #`
 
 printf '%s\n' "You will be asked 9 questions to configure the Pipeline"
-read  -n 1 -p "Press ENTER to start creating the pipeline -1" dummyinput
-read  -n 1 -p "Press ENTER to start creating the pipeline -2" dummyinput
 read  -n 1 -p "Press ENTER to start creating the pipeline -3" dummyinput
-read  -n 1 -p "Press ENTER to start creating the pipeline -4" dummyinput
-read  -n 1 -p "Press ENTER to start creating the pipeline -5" dummyinput
+read  -n 1 -p "Press ENTER to start creating the pipeline -2" dummyinput
+read  -n 1 -p "Press ENTER to start creating the pipeline -1" dummyinput
 
 #the following command will invoke 9 questions 
 printf '%s\n' "      Which template do you want to use for this pipeline?  "
